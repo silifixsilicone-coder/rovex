@@ -8,12 +8,6 @@ import {
   INITIAL_SILIFIX_IMAGES,
 } from "@/data/silifix-products";
 import {
-  getStoredFounderProfile,
-  saveStoredFounderProfile,
-  FounderProfile,
-  DEFAULT_FOUNDER_PROFILE,
-} from "@/data/founder-profile";
-import {
   Plus,
   Trash2,
   MoveUp,
@@ -23,8 +17,6 @@ import {
   RefreshCw,
   Upload,
   CheckCircle,
-  User,
-  Save,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -34,17 +26,10 @@ export default function AdminPage() {
   const [newDesc, setNewDesc] = useState("");
   const [newUrl, setNewUrl] = useState("");
   const [fileInput, setFileInput] = useState<File | null>(null);
-
-  // Founder Profile State
-  const [founder, setFounder] = useState<FounderProfile>(DEFAULT_FOUNDER_PROFILE);
-  const [founderFile, setFounderFile] = useState<File | null>(null);
-
   const [savedSuccess, setSavedSuccess] = useState(false);
-  const [founderSavedSuccess, setFounderSavedSuccess] = useState(false);
 
   useEffect(() => {
     setImages(getStoredSilifixImages());
-    setFounder(getStoredFounderProfile());
   }, []);
 
   const saveImages = (updated: SilifixProductImage[]) => {
@@ -52,27 +37,6 @@ export default function AdminPage() {
     saveStoredSilifixImages(updated);
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 2500);
-  };
-
-  const handleFounderPhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFounderFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (typeof reader.result === "string") {
-          setFounder((prev) => ({ ...prev, photoUrl: reader.result as string }));
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSaveFounderProfile = (e: React.FormEvent) => {
-    e.preventDefault();
-    saveStoredFounderProfile(founder);
-    setFounderSavedSuccess(true);
-    setTimeout(() => setFounderSavedSuccess(false), 2500);
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,8 +99,6 @@ export default function AdminPage() {
 
   const handleResetDefault = () => {
     saveImages(INITIAL_SILIFIX_IMAGES);
-    saveStoredFounderProfile(DEFAULT_FOUNDER_PROFILE);
-    setFounder(DEFAULT_FOUNDER_PROFILE);
   };
 
   return (
@@ -155,7 +117,7 @@ export default function AdminPage() {
               ROVEX Admin Panel
             </h1>
             <p className="text-sm text-[#525C58] font-light mt-1">
-              Manage Founder Profile (<strong className="text-[#00584F]">Pramod Raut</strong>) and Silifix product imagery.
+              Manage product imagery for <strong className="text-[#00584F]">Silifix Silicone</strong>.
             </p>
           </div>
 
@@ -169,118 +131,15 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {founderSavedSuccess && (
+        {savedSuccess && (
           <div className="mt-4 p-4 rounded-xl bg-[#00584F] text-[#F8F7E8] text-xs font-semibold flex items-center gap-2 shadow-md">
             <CheckCircle className="w-4 h-4" />
-            <span>Founder profile updated! Check the website homepage to see live changes.</span>
+            <span>Changes saved successfully to localStorage! Visit the homepage to see live updates.</span>
           </div>
         )}
 
-        {/* Section 1: Founder Profile Management */}
-        <div className="mt-8 bg-[#F2F0DF] p-6 sm:p-8 rounded-3xl border border-[#E5E1C9] shadow-sm">
-          <h2 className="text-2xl font-serif-heading font-bold text-[#111615] flex items-center gap-2 mb-2">
-            <User className="w-6 h-6 text-[#00584F]" /> Founder Profile Settings (Pramod Raut)
-          </h2>
-          <p className="text-xs text-[#525C58] mb-6">
-            Upload your portrait photo and update your details to display on the ROVEX website.
-          </p>
-
-          <form onSubmit={handleSaveFounderProfile} className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-            {/* Photo Upload Column */}
-            <div className="md:col-span-5 flex flex-col items-center text-center space-y-4">
-              <div className="relative w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden border-4 border-[#00584F] shadow-xl bg-[#003832]">
-                <img
-                  src={founder.photoUrl}
-                  alt={founder.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              <div className="w-full">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFounderPhotoUpload}
-                  className="hidden"
-                  id="founder-photo-upload"
-                />
-                <label
-                  htmlFor="founder-photo-upload"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#00584F] text-[#F8F7E8] text-xs font-semibold uppercase tracking-wider cursor-pointer hover:bg-[#00453E] transition-all shadow-md"
-                >
-                  <Upload className="w-4 h-4" />
-                  <span>Upload My Photo</span>
-                </label>
-                <p className="text-[10px] text-[#525C58] mt-1.5">
-                  PNG, JPG, WEBP formats supported
-                </p>
-              </div>
-            </div>
-
-            {/* Form Fields Column */}
-            <div className="md:col-span-7 space-y-4 text-xs">
-              <div>
-                <label className="font-semibold text-[#111615] block mb-1">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  value={founder.name}
-                  onChange={(e) => setFounder({ ...founder, name: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7E8] border border-[#E5E1C9] text-xs font-semibold text-[#111615] focus:outline-none focus:border-[#00584F]"
-                />
-              </div>
-
-              <div>
-                <label className="font-semibold text-[#111615] block mb-1">
-                  Title / Designation
-                </label>
-                <input
-                  type="text"
-                  value={founder.title}
-                  onChange={(e) => setFounder({ ...founder, title: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F8E8] border border-[#E5E1C9] text-xs text-[#111615] focus:outline-none focus:border-[#00584F]"
-                />
-              </div>
-
-              <div>
-                <label className="font-semibold text-[#111615] block mb-1">
-                  Bio / Statement
-                </label>
-                <textarea
-                  rows={3}
-                  value={founder.bio}
-                  onChange={(e) => setFounder({ ...founder, bio: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7E8] border border-[#E5E1C9] text-xs text-[#111615] focus:outline-none focus:border-[#00584F] resize-none"
-                />
-              </div>
-
-              <div>
-                <label className="font-semibold text-[#111615] block mb-1">
-                  Or Photo Image URL
-                </label>
-                <input
-                  type="url"
-                  placeholder="https://..."
-                  value={founder.photoUrl}
-                  onChange={(e) => setFounder({ ...founder, photoUrl: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7E8] border border-[#E5E1C9] text-xs text-[#111615] focus:outline-none focus:border-[#00584F]"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-3.5 rounded-xl bg-[#00584F] text-[#F8F7E8] font-semibold text-xs uppercase tracking-wider hover:bg-[#00453E] transition-all flex items-center justify-center gap-2 shadow-md"
-              >
-                <Save className="w-4 h-4" />
-                <span>Save Founder Profile</span>
-              </button>
-            </div>
-          </form>
-        </div>
-
-        {/* Section 2: Silifix Gallery */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mt-10">
+        {/* Silifix Gallery Management */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mt-8">
           <div className="lg:col-span-5 bg-[#F2F0DF] p-6 sm:p-8 rounded-3xl border border-[#E5E1C9] shadow-sm">
             <h2 className="text-xl font-serif-heading font-bold text-[#111615] flex items-center gap-2 mb-4">
               <Plus className="w-5 h-5 text-[#00584F]" /> Add Silifix Product Image

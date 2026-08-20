@@ -11,7 +11,6 @@ import { FutureAISection } from "@/components/future-ai-section";
 import { SayusAISection } from "@/components/sayus-ai-section";
 import { TransitionSection } from "@/components/transition-section";
 import { PhilosophySection } from "@/components/philosophy-section";
-import { FounderSection } from "@/components/founder-section";
 import { AboutSection } from "@/components/about-section";
 import { CTASection } from "@/components/cta-section";
 import { Footer } from "@/components/footer";
@@ -47,8 +46,6 @@ export default function Home() {
         <TransitionSection />
 
         <PhilosophySection />
-
-        <FounderSection />
 
         <AboutSection />
 
