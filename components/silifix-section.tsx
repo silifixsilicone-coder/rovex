@@ -55,8 +55,7 @@ export function SilifixSection() {
           className="mt-6 space-y-3 text-base sm:text-xl text-[#F8F7E8]/90 font-sans-body font-light leading-relaxed max-w-2xl"
         >
           <p>
-            Silifix is a silicone sealant and silicone products business started by{" "}
-            <strong className="font-semibold text-white">Pramod Raut</strong> in 2022.
+            Silifix is a silicone sealant and silicone products business established in 2022.
           </p>
           <p>
             Starting with manufacturing, Silifix became the foundation for building the businesses and technology products that followed.

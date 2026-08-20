@@ -48,7 +48,7 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mt-6 sm:mt-8 text-base sm:text-xl md:text-2xl text-[#525C58] max-w-2xl font-sans-body font-light leading-relaxed px-2"
         >
-          ROVEX is a technology and venture studio building products across manufacturing, software and artificial intelligence, founded by Pramod Raut.
+          ROVEX is a technology and venture studio building products across manufacturing, software and artificial intelligence.
         </motion.p>
 
         {/* 4. CTA Button */}
